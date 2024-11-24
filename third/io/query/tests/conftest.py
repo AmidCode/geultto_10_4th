@@ -8,18 +8,6 @@ from sqlalchemy.orm import sessionmaker
 from third.io.query.table import metadata
 
 
-@pytest.fixture(scope="function")
-def session():
-    engine = create_engine("sqlite:///:memory:")
-    Session = sessionmaker(bind=engine)
-    metadata.create_all(engine)
-    session = Session()
-    yield session
-    session.close()
-    metadata.drop_all(engine)
-    engine.dispose()
-
-
 def create_database(default_url: str, db_name: str):
     """테스트 데이터베이스 생성"""
     engine = create_engine(default_url)
