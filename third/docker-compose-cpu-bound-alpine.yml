@@ -1,0 +1,38 @@
+x-resource-limitations: &resource_limitations
+  mem_limit: "6g"           # 컨테이너가 사용할 수 있는 최대 메모리
+  memswap_limit: "8g"       # swap 포함 총 메모리 제한
+  mem_reservation: "2g"     # 보장받을 최소 메모리
+  cpus: 4.0
+
+services:
+  py3.12-cpu-alpine-01-kmeans:
+    <<: *resource_limitations
+    platform: linux/amd64
+    image: geultto:py3.12-cpu-alpine-01-kmeans
+    build:
+      context: cpu
+      dockerfile: ../containers/alpine/3.12/Dockerfile-01-kmeans
+
+  py3.13-cpu-alpine-01-kmeans:
+    <<: *resource_limitations
+    platform: linux/amd64
+    image: geultto:py3.13-cpu-alpine-01-kmeans
+    build:
+      context: cpu
+      dockerfile: ../containers/alpine/3.13/Dockerfile-01-kmeans
+
+  py3.12-cpu-alpine-02-random-forest:
+    <<: *resource_limitations
+    platform: linux/amd64
+    image: geultto:py3.12-cpu-alpine-02-random-forest
+    build:
+      context: cpu
+      dockerfile: ../containers/alpine/3.12/Dockerfile-02-random-forest
+
+  py3.13-cpu-alpine-02-random-forest:
+    <<: *resource_limitations
+    platform: linux/amd64
+    image: geultto:py3.13-cpu-alpine-02-random-forest
+    build:
+      context: cpu
+      dockerfile: ../containers/alpine/3.13/Dockerfile-02-random-forest

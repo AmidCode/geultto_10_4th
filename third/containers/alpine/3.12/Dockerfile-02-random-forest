@@ -1,0 +1,23 @@
+FROM python:3.12-alpine AS builder
+RUN apk add --no-cache \
+    build-base \
+    python3-dev \
+    openblas-dev \
+    g++ \
+    gcc \
+    musl-dev \
+    linux-headers
+WORKDIR /app
+COPY requirements.txt .
+RUN pip wheel --no-cache-dir --wheel-dir=/wheels -r requirements.txt
+
+FROM python:3.12-alpine AS runner
+RUN apk add --no-cache libgomp libstdc++
+WORKDIR /app
+ENV PYTHONUNBUFFERED=1
+COPY --from=builder /wheels /wheels
+COPY 02_random_forest.py .
+RUN pip install --no-cache-dir --no-index --find-links=/wheels /wheels/* \
+    && rm -rf /wheels
+
+ENTRYPOINT ["python", "/app/02_random_forest.py"]
