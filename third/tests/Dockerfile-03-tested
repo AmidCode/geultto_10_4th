@@ -1,0 +1,16 @@
+# 빌드 스테이지
+FROM python:3.13-slim-bookworm AS builder
+WORKDIR /app
+COPY requirements.txt .
+RUN pip wheel --no-cache-dir --wheel-dir=/wheels -r requirements.txt
+
+# 최종 스테이지
+FROM python:3.13-slim-bookworm AS runner
+WORKDIR /app
+ENV PYTHONUNBUFFERED=1
+COPY --from=builder /wheels /wheels
+COPY tested.py .
+RUN pip install --no-cache-dir --no-index --find-links=/wheels /wheels/* \
+    && rm -rf /wheels
+
+ENTRYPOINT ["python", "/app/tested.py"]
