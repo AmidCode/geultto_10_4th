@@ -14,7 +14,7 @@ services:
       POSTGRES_DB: geultto
       POSTGRES_PASSWORD: example
     volumes:
-      - geultto10_pg16_alpine:/var/lib/postgresql/data
+      - geultto10_pg16_debian:/var/lib/postgresql/data
 
   pgadmin:
     image: dpage/pgadmin4
@@ -25,21 +25,21 @@ services:
       PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
       PGADMIN_DEFAULT_PASSWORD: strong-password
 
-  py3.12-io-alpine-01:
+  py3.12-io-debian-01:
     <<: *resource_limitations
     platform: linux/amd64
-    image: geultto:py3.12-io-alpine-01
+    image: geultto:py3.12-io-debian-01
     build:
       context: io
-      dockerfile: ../containers/alpine/3.12/Dockerfile-04-io
+      dockerfile: ../containers/debian/3.12/Dockerfile-04-io
 
-  py3.13-io-alpine-01:
+  py3.13-io-debian-01:
     <<: *resource_limitations
     platform: linux/amd64
-    image: geultto:py3.13-io-alpine-01
+    image: geultto:py3.13-io-debian-01
     build:
       context: io
-      dockerfile: ../containers/alpine/3.13/Dockerfile-04-io
+      dockerfile: ../containers/debian/3.13/Dockerfile-04-io
 
 volumes:
-  geultto10_pg16_alpine:
+  geultto10_pg16_debian:
