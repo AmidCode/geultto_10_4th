@@ -1,0 +1,37 @@
+x-resource-limitations: &resource_limitations
+  mem_limit: "6g"           # 컨테이너가 사용할 수 있는 최대 메모리
+  memswap_limit: "8g"       # swap 포함 총 메모리 제한
+  mem_reservation: "2g"     # 보장받을 최소 메모리
+  cpus: 4.0
+
+services:
+  pg16:
+    image: postgres:16
+    platform: linux/amd64
+    ports:
+      - "15432:5432"
+    environment:
+      POSTGRES_DB: geultto
+      POSTGRES_PASSWORD: example
+    volumes:
+      - geultto10_pg16:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8888:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: user-name@domain-name.com
+      PGADMIN_DEFAULT_PASSWORD: strong-password
+
+  py3.12-io-alpine-01:
+    <<: *resource_limitations
+    platform: linux/amd64
+    image: geultto:py3.12-io-alpine-01
+    build:
+      context: io
+      dockerfile: ../containers/alpine/3.12/Dockerfile-04-io
+
+volumes:
+  geultto10_pg16:

@@ -13,11 +13,11 @@ from third.io.query.factories import UserFactory
 class TestUser:
     def test_user(self, session):
         user1 = User.create(
-            UserInfo(name="hotaru", age=20, gender=Gender.MALE),
+            UserInfo(name="sora", age=20, gender=Gender.MALE),
             UserProfile(nickname="aether", pic="/path/to/pic.png"),
         )
         user2 = User.create(
-            UserInfo(name="hikari", age=20, gender=Gender.FEMALE),
+            UserInfo(name="hotaru", age=20, gender=Gender.FEMALE),
             UserProfile(nickname="lumine", pic="/path/to/pic.png"),
         )
 
@@ -40,8 +40,10 @@ class TestUser:
     def test_using_factory(self, session):
         factory = UserFactory()
 
-        users = factory.create_users(5)
-        assert len(users) == 5
+        USERS = 1_000
+
+        users = factory.create_users(USERS)
+        assert len(users) == USERS
         assert all(isinstance(u.info, UserInfo) for u in users)
 
         session.add_all(users)
@@ -59,5 +61,6 @@ class TestUser:
 
         queried = result.scalars().all()
 
-        for user in queried:
-            print(user)
+        print(len(queried))
+
+        assert len(queried) == USERS

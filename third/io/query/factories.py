@@ -14,6 +14,7 @@ from third.io.query.domain import (
 class UserFactory:
     def __init__(self, seed: int = None):
         self.faker = Faker(["ko_KR"])  # 한국어 로케일 사용
+        self.counter = 0  # 순차적 증가를 위한 카운터 추가
 
         # seed가 None이면 현재 시각 기반 seed 사용
         if seed is None:
@@ -32,8 +33,9 @@ class UserFactory:
         random.seed(seed)
 
     def create_user_info(self) -> UserInfo:
+        self.counter += 1
         return UserInfo(
-            name=self.faker.name(),
+            name=f"user_{self.counter:06d}",
             age=random.randint(20, 60),
             gender=random.choice([Gender.MALE, Gender.FEMALE]),
         )
@@ -52,3 +54,6 @@ class UserFactory:
 
     def create_users(self, count: int) -> list[User]:
         return [self.create_user() for _ in range(count)]
+
+    def reset_counter(self):  # 카운터 리셋 메서드 추가
+        self.counter = 0
